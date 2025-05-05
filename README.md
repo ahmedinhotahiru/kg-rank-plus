@@ -9,7 +9,7 @@ KG-Rank+ is an enhanced framework for medical question answering that extends th
 <!-- Framework -->
 ## KG-Rank Framework
 <br> <!--  -->
-<p align="left">
+<p align="center">
    <img src="kg-rank-plus-architecture.jpeg" style="width: 50%;"/>
 </p>
 
