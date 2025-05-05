@@ -1,0 +1,1 @@
+python complete_evaluation.py --results_file ../results_multihop/LiveQA_gpt4_similarity_multihop_results_20250410_135113.csv --model_type gpt4 --ranking_method similarity --output_file ../scores_multihop/LiveQA_gpt4_similarity_multihop_scores.csv

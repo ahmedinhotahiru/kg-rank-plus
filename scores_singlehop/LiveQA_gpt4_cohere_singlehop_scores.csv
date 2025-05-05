@@ -1,0 +1,2 @@
+ROUGE-L,BERTScore,BLEURT,model_type,ranking_method
+19.577233276390963,82.91624784469604,45.75446497362394,gpt4,rerank_cohere

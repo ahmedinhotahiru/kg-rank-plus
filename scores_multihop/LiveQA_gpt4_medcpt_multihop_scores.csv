@@ -1,0 +1,2 @@
+ROUGE-L,BERTScore,BLEURT,model_type,ranking_method
+19.67784746768458,82.96180963516235,45.8641476642627,gpt4,rerank_medcpt
