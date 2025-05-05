@@ -81,17 +81,32 @@ The main execution script is `gpt4_umls.py` in the `KG-Rank-UMLS` directory. You
 
 For multi-hop traversal with MMR ranking:
 ```python
-from multi_hop_umls_mmr_new import get_umls_keys
+from multi_hop_umls_mmr import get_umls_keys
 ```
 
 For multi-hop traversal with Answer Expansion ranking:
 ```python
-from new_multihop_expansion import get_umls_keys
+from multi_hop_expansion import get_umls_keys
 ```
 
-For multi-hop BFS traversal with expansion:
+For multi-hop traversal with random ranking:
 ```python
-from bfs_multihop_expansion import get_umls_keys
+from multi_hop_umls_random import get_umls_keys
+```
+
+For multi-hop traversal with similarity ranking:
+```python
+from multi_hop_umls_similarity import get_umls_keys
+```
+
+For multi-hop traversal with Cohere re-ranking:
+```python
+from multi_hop_umls_rerank_cohere import get_umls_keys
+```
+
+For multi-hop traversal with MedCPT re-ranking:
+```python
+from multi_hop_umls_medcpt import get_umls_keys
 ```
 
 Execute the script:
