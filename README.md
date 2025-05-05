@@ -7,7 +7,7 @@ KG-Rank+ is an enhanced framework for medical question answering that extends th
 *Issah, A. T., Seidu, I., & Adjei, E. A. (2024). KG-Rank+: Enhancing LLM-based Medical Question Answering with Multi-hop Knowledge Graph Traversal and Ranking Techniques.*
 
 <!-- Framework -->
-## KG-Rank Framework
+## KG-Rank+ Framework
 <br> <!--  -->
 <p align="center">
    <img src="kg-rank-plus-architecture.jpeg" style="width: 50%;"/>
