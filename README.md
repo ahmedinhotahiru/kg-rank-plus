@@ -1,6 +1,6 @@
 # KG-Rank+: Enhancing LLM-based Medical Question Answering with Multi-hop Knowledge Graph Traversal
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+<!-- [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) -->
 
 KG-Rank+ is an enhanced framework for medical question answering that extends the original [KG-Rank](https://github.com/YangRui525/KG-Rank) approach by incorporating controlled multi-hop knowledge graph traversal. This repository contains the implementation of our work:
 
@@ -211,6 +211,6 @@ This work builds upon the original KG-Rank framework and extends it with multi-h
 }
 ```
 
-## License
+<!-- ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details. -->
