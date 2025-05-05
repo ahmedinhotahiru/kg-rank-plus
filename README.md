@@ -1,94 +1,231 @@
-# KG-Rank: Enhancing Large Language Models for Medical QA with Knowledge Graphs and Ranking Techniques
+# KG-Rank+: Enhancing LLM-based Medical Question Answering with Multi-hop Knowledge Graph Traversal
 
-Large Language Models (LLMs) have significantly advanced healthcare innovation in generation capabilities. However, their application in real clinical settings is challenging due to potential deviations from medical facts and inherent biases. In this work, we develop an augmented LLM framework, KG-Rank, which leverages a medical knowledge graph (KG) with ranking and re-ranking techniques, aiming to improve free-text question-answering (QA) in the medical domain. 
+<!-- [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) -->
+
+KG-Rank+ is an enhanced framework for medical question answering that extends the original [KG-Rank](https://github.com/YangRui525/KG-Rank) approach by incorporating controlled multi-hop knowledge graph traversal. This repository contains the implementation of our work:
+
+*Issah, A. T., Seidu, I., & Adjei, E. A. (2024). KG-Rank+: Enhancing LLM-based Medical Question Answering with Multi-hop Knowledge Graph Traversal and Ranking Techniques.*
 
 <!-- Framework -->
-## KG-Rank Framework
+## KG-Rank+ Framework
 <br> <!--  -->
 <p align="center">
-   <img src="framework.png" style="width: 50%;"/>
+   <img src="kg-rank-plus-architecture.jpeg" style="width: 50%;"/>
 </p>
 
-<!-- Contents -->
-## Table of Contents
-* [Data](#data)
-* [LLM-based Evaluation](#llm-based-evaluation)
-* [KG-Rank in Open Domains](#kg-rank-in-open-domains)
-* [Case Study](#case-study)
-* [System Demo](#system-demo)
-* [Contact](#contact)
-* [Citation](#citation)
+## Overview
 
+Large Language Models (LLMs) like GPT-4 have shown significant potential in medical question answering but remain prone to hallucinations and factual inconsistencies, especially for complex clinical queries. KG-Rank+ addresses this challenge by extending beyond single-hop knowledge retrieval to incorporate controlled multi-hop traversal of medical knowledge graphs.
 
-<!-- Data -->
-## Data 
-We conduct experiments on four medical QA datasets, in which the answers are free-text. [LiveQA](https://trec.nist.gov/pubs/trec26/papers/Overview-QA.pdf) consists of health questions submitted by consumers to the National Library of Medicine. [ExpertQA](https://arxiv.org/pdf/2309.07852)  is a high-quality long-form QA dataset with 2177 questions spanning 32 fields, along with answers verified by domain experts. Among them, 504 medical questions (Med) and 96 biology (Bio) questions were used for evaluation. [MedicationQA](https://ebooks.iospress.nl/doi/10.3233/SHTI190176) includes 690 drug-related consumer questions along with information retrieved from reliable websites and scientific papers.
+### Key Innovations:
 
-<!-- LLM-based Evaluation -->
-## LLM-based Evaluation
-KG-Rank achieves significant improvements in ROUGE, BERTScore, MoverScore, and BLEURT, however, these automatic scores have limitations in evaluating the factuality of long-form medical QA. Therefore, we introduce the GPT-4 score specifically for factuality evaluation. The evaluation criteria are designed by two resident physicians with over five years of experience.
-### Evalution Criteria
-|                     | **Description**                                                                                                                   |
-|---------------------|-----------------------------------------------------------------------------------------------------------------------------------|
-| **Factuality**      | The degree to which the generated text aligns with established medical facts, providing accurate explanations for further verification. |
-| **Completeness**    | The degree to which the generated text comprehensively portrays the clinical scenario or posed question, including other pertinent considerations. |
-| **Readability**     | The extent to which the generated text is readily comprehensible to the user, incorporating suitable language and structure to facilitate accessibility. |
-| **Relevance**       | The extent to which the generated text directly addresses medical questions while encompassing a comprehensive range of pertinent information. |
+- **Multi-hop Breadth-First Search (BFS)**: Systematically explores the UMLS knowledge graph up to three hops from the initial entities identified in a query
+- **Progressive Pruning Strategy**: Applies decreasing relation limits at each hop (20→7→3) to balance knowledge coverage with computational efficiency
+- **Path-aware Ranking**: Adapts existing ranking techniques to handle multi-hop knowledge paths effectively
 
-<!-- KG-Rank in Open Domains -->
-## KG-Rank in Open Domains
-To further demonstrate the effectiveness of KG-Rank, we extend it to the open domains (including law, business, music,and history) by replacing UMLS with Wikipedia through the [DBpedia API](https://www.dbpedia.org/). KG-Rank realizes a 14% improvement in ROUGE-L score, indicating the effectiveness and great potential of KG-Rank.
+## Repository Structure
 
-<!-- Case Study -->
-## Case Study
-### Case Study in Medicine:
+```
+├── data_preprocessing         # Scripts for preprocessing raw datasets
+├── evaluation_datasets        # Preprocessed evaluation datasets
+├── kg_rank_evaluation         # Evaluation scripts and tools
+├── KG-Rank-UMLS               # Core implementation files for UMLS-based version
+│   └── gpt4_umls.py           # Main execution script
+├── KG-Rank-WikiPedia          # Implementation for open-domain version with DBpedia
+├── results_multihop           # Results from multi-hop traversal experiments
+├── results_singlehop          # Results from single-hop (baseline) experiments
+├── scores_multihop            # Evaluation scores for multi-hop experiments
+├── scores_singlehop           # Evaluation scores for single-hop experiments
+├── full_evaluation_readme.md  # Instructions for evaluation setup
+└── README.md                  # This file
+```
 
-<br> <!--  -->
-<p align="center">
-   <img src="case_study_one.png" style="width: 50%;"/>
-</p>
+## Installation
 
-### Case Study in Open Domains:
+### Prerequisites
 
-<br> <!--  -->
-<p align="center">
-   <img src="case_study_two.png" style="width: 50%;"/>
-</p>
+- Python 3.8+
+- PyTorch 1.10+
+- Access to UMLS API
+- Access to an LLM (GPT-4 used in our experiments)
 
-<!-- System Demo -->
-## System Demo
-Early KG-Rank Demo (based on ChatGPT-3.5) <br> Creation Time: Oct 2023. 
-<br> <!--  -->
-<p align="center">
-   <img src="KG-Rank demo.gif" width="1200"/>
-</p>
+### Setup
 
-<!-- Contact -->
-## Contact
-Rui Yang: yang.rui@duke-nus.edu.sg <br>
-Dr. Irene Li: ireneli@ds.itc.u-tokyo.ac.jp
+1. Clone the repository:
+```bash
+git clone https://github.com/ahmedinhotahiru/kg-rank-plus.git
+cd kg-rank-plus
+```
 
-<!-- Citation -->
+2. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+3. Set up environment variables:
+Create a `.env` file in the root directory with the following variables:
+```bash
+UMLS_API_KEY="your-umls-api-key"
+COHERE_API_KEY="your-cohere-api-key"
+OPENAI_API_KEY="your-openai-api-key"
+LLAMA_TOKEN="your-huggingface-token"
+```
+
+Replace the placeholder values with your actual API keys.
+
+## Usage
+
+### Running the Main Pipeline
+
+The main execution script is `gpt4_umls.py` in the `KG-Rank-UMLS` directory. You can choose which ranking method to use by changing the import statement at the top of the file:
+
+For multi-hop traversal with MMR ranking:
+```python
+from multi_hop_umls_mmr import get_umls_keys
+```
+
+For multi-hop traversal with Answer Expansion ranking:
+```python
+from multi_hop_expansion import get_umls_keys
+```
+
+For multi-hop traversal with random ranking:
+```python
+from multi_hop_umls_random import get_umls_keys
+```
+
+For multi-hop traversal with similarity ranking:
+```python
+from multi_hop_umls_similarity import get_umls_keys
+```
+
+For multi-hop traversal with Cohere re-ranking:
+```python
+from multi_hop_umls_rerank_cohere import get_umls_keys
+```
+
+For multi-hop traversal with MedCPT re-ranking:
+```python
+from multi_hop_umls_medcpt import get_umls_keys
+```
+
+Execute the script:
+```bash
+cd KG-Rank-UMLS
+python gpt4_umls.py
+```
+
+### Configuration
+
+You can modify the following parameters in `gpt4_umls.py`:
+
+- `input_file`: Path to the input dataset
+- `model_type`: LLM model to use (e.g., "gpt4")
+- `ranking_type`: Ranking method to use (e.g., "mmr", "similarity")
+- `output_file`: Path to save the results
+
+## Multi-hop BFS Traversal
+
+The core innovation of KG-Rank+ is the multi-hop BFS traversal algorithm, which systematically explores the knowledge graph with controlled expansion:
+
+- **Hop 1**: 20 related concepts per source entity
+- **Hop 2**: 7 related concepts per hop-1 concept
+- **Hop 3**: 3 related concepts per hop-2 concept
+
+This progressive pruning strategy ensures computational efficiency while maintaining semantic depth.
+
+## Evaluation
+
+### Datasets
+
+We evaluate KG-Rank+ on the LiveQA dataset, which consists of 104 test pairs of consumer health questions.
+
+### Metrics
+
+Our evaluation uses four complementary metrics:
+- **ROUGE-L**: Measures lexical overlap and key information capture
+- **BERTScore**: Assesses semantic similarity using contextual embeddings
+- **BLEURT**: A learned metric trained on human judgments that evaluates semantic quality and factual accuracy
+- **MoverScore**: Measures semantic similarity with Earth Mover's Distance
+
+### Running Evaluation
+
+To run the complete evaluation on your results:
+
+1. Navigate to the evaluation directory:
+```bash
+cd kg_rank_evaluation
+```
+
+2. Run the evaluation script:
+```bash
+python complete_evaluation.py \
+    --results_file /path/to/your/results.csv \
+    --model_type gpt4 \
+    --ranking_method your_ranking_method \
+    --output_file evaluation_results/your_results_eval.csv
+```
+
+See `full_evaluation_readme.md` for detailed instructions on setting up and running the evaluation pipeline.
+
+## Results
+
+KG-Rank+ consistently outperforms the baseline KG-Rank across all ranking methods:
+
+| Method | ROUGE-L | BERTScore | BLEURT |
+|--------|---------|-----------|--------|
+| Zero Shot | 19.29 (+0.40) | 82.81 (+0.31) | 45.82 (+5.98) |
+| Similarity | 20.32 (+0.97) | 83.07 (+0.06) | 45.98 (+5.51) |
+| Answer Expansion | 19.78 (+0.54) | 82.92 (-0.03) | 45.97 (+5.82) |
+| MMR | 19.81 (+0.49) | 82.93 (+0.02) | 45.57 (+5.02) |
+| Reranking (Cohere) | 19.58 (+0.86) | 82.93 (-0.01) | 45.59 (+5.52) |
+| Reranking (MedCPT) | 19.68 (+0.24) | 82.96 (+0.01) | 45.86 (+5.36) |
+| **Average** | **19.74 (+0.58)** | **82.94 (+0.06)** | **45.80 (+5.54)** |
+
+*Values in parentheses show improvements over the single-hop KG-Rank baseline*
+
+## Limitations and Future Work
+
+- **Fixed pruning thresholds** don't adapt to query complexity
+- **Reduced page retrieval** (5 pages vs. 20 in baseline) for computational efficiency
+- **Random sampling** during pruning may overlook semantically important paths
+- **Limited evaluation** on a single dataset
+
+Future improvements will focus on:
+
+1. Implementing **similarity-based path selection** to replace random sampling
+2. Developing **adaptive traversal parameters** based on query complexity
+3. Creating a **cross-path reasoning layer** to synthesize information
+4. Expanding evaluation to **additional medical datasets** with expert assessment
+
 ## Citation
+
+We are still working on publishing this paper and will update with the appropriate citation here once published:
+
+<!-- ```bibtex
+@article{issah2024kgrankplus,
+  title={KG-Rank+: Enhancing LLM-based Medical Question Answering with Multi-hop Knowledge Graph Traversal and Ranking Techniques},
+  author={Issah, Ahmed Tahiru and Seidu, Idaya and Adjei, Emmanuel Amankwaa},
+  journal={},
+  year={2024}
+}
+``` -->
+
+## Acknowledgements
+
+This work builds upon the original KG-Rank framework and extends it with multi-hop capabilities. We gratefully acknowledge the authors of KG-Rank for their foundational work:
 
 ```bibtex
 @misc{yang2024kgrank,
-      title={KG-Rank: Enhancing Large Language Models for Medical QA with Knowledge Graphs and Ranking Techniques}, 
-      author={Rui Yang and Haoran Liu and Edison Marrese-Taylor and Qingcheng Zeng and Yu He Ke and Wanxin Li and Lechao Cheng and Qingyu Chen and James Caverlee and Yutaka Matsuo and Irene Li},
-      year={2024},
-      eprint={2403.05881},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
+  title={KG-Rank: Enhancing Large Language Models for Medical QA with Knowledge Graphs and Ranking Techniques},
+  author={Yang, Rui and Liu, Haoran and Marrese-Taylor, Edison and Zeng, Qingcheng and Ke, Yu He and Li, Wanxin and Cheng, Lechao and Chen, Qingyu and Caverlee, James and Matsuo, Yutaka and Li, Irene},
+  year={2024},
+  eprint={2403.05881},
+  archivePrefix={arXiv},
+  primaryClass={cs.CL}
 }
+```
 
-Previous Research:
-@misc{yang2023integratingumlsknowledgelarge,
-      title={Integrating UMLS Knowledge into Large Language Models for Medical Question Answering}, 
-      author={Rui Yang and Edison Marrese-Taylor and Yuhe Ke and Lechao Cheng and Qingyu Chen and Irene Li},
-      year={2023},
-      eprint={2310.02778},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2310.02778}, 
-}
+<!-- ## License
 
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details. -->
